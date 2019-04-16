@@ -59,7 +59,9 @@ class App extends Component {
             value={this.state.location}
             onChange={e => this.setState({ location: e.target.value })}
           />
-          <button type="submit">Submit</button>
+          <p>
+            <button type="submit">Submit</button>
+          </p>
         </form>
         <p>{this.state.responseToPost}</p>
       </div>
