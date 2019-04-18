@@ -5,7 +5,7 @@ if (typeof window !== 'undefined' && window.fetch) {
   fetch = require('cross-fetch'); // eslint-disable-line global-require
 }
 
-export default class Client {
+class Client {
   constructor(address, defaultOptions = {}) {
     if (typeof address !== 'string') throw new Error('InvalidArgument: address has to ba a string');
     if (typeof defaultOptions !== 'object')
@@ -32,3 +32,5 @@ export default class Client {
   }
 
 }
+
+export default Client;
