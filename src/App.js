@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import emmetAPI from './emmetAPI';
 import './App.css';
 
 class App extends Component {
@@ -16,7 +17,7 @@ class App extends Component {
   }
 
   callApi = async () => {
-    const response = await fetch('/api/v1/stores');
+    const response = await emmetAPI.fetchUrl('/api/v1/stores');
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
@@ -24,7 +25,7 @@ class App extends Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const response = await fetch('/api/v1/stores', {
+    const response = await emmetAPI.fetchUrl('/api/v1/stores', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
