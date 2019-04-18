@@ -19,15 +19,19 @@ class Client {
       ...defaultOptions,
     };
 
-    this.fetchURL = this.fetchURL.bind(this);
+    this.fetchUrl = this.fetchUrl.bind(this);
   }
 
-  fetchURL(request, options) {
-    return fetch(this.address, {
-      body: JSON.stringify(request),
-      headers: options.headers,
-      method: 'post',
-      mode: 'cors',
+  getUrl(url) {
+    return fetch(this.address + url);
+  }
+
+  fetchUrl(url, request) {
+    return fetch(this.address + url, {
+      body: request.body || {},
+      headers: request.headers || {},
+      method: request.method || {},
+      mode: request.mode || 'cors',
     });
   }
 
