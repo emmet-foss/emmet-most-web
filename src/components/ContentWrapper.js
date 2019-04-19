@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
+import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
+import { withRouter } from "react-router";
 import { DatePicker, Layout, Menu, Breadcrumb, Icon } from 'antd';
-import emmetAPI from './emmetAPI';
+import emmetAPI from '../emmetAPI';
 import 'antd/dist/antd.css';
-import './App.css';
+import './ContentWrapper.css';
 
 const {
   Header, Content, Footer, Sider,
 } = Layout;
 
-class App extends Component {
+class ContentWrapper extends Component {
+  static propTypes = {
+    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
+  };
+
   state = {
     response: '',
     name: '',
@@ -54,6 +62,7 @@ class App extends Component {
   };
 
   render() {
+    console.log('location.pathname', this.props.location.pathname);
 
     return (
       <Layout style={{ minHeight: '100vh' }}>
@@ -125,4 +134,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(ContentWrapper);
