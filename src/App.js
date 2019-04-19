@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { DatePicker, Layout, Menu, Breadcrumb, Icon } from 'antd';
 import emmetAPI from './emmetAPI';
 import 'antd/dist/antd.css';
@@ -65,15 +66,15 @@ class App extends Component {
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
             <Menu.Item key="1">
               <Icon type="pie-chart" />
-              <span>Stores</span>
+              <Link to="/stores">Stores</Link>
             </Menu.Item>
             <Menu.Item key="2">
               <Icon type="desktop" />
-              <span>Menus</span>
+              <Link to="/menus">Menus</Link>
             </Menu.Item>
             <Menu.Item key="9">
               <Icon type="file" />
-              <span>Orders</span>
+              <Link to="/orders">Orders</Link>
             </Menu.Item>
           </Menu>
         </Sider>
