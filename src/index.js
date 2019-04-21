@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import './index.css';
 import App from './App';
-import Users from './components/users';
-import Contact from './components/contact';
 import Notfound from './components/notfound';
 import ContentWrapper from './components/ContentWrapper';
 
@@ -14,11 +12,7 @@ const routing = (
     <Router>
         <Switch>
             <Route exact path="/" component={App} />
-            <Route path="/users" component={Users} />
-            <Route path="/contact" component={Contact} />
             <Route path="/stores" component={ContentWrapper} />
-            <Route path="/menus" component={ContentWrapper} />
-            <Route path="/orders" component={ContentWrapper} />
             <Route component={Notfound} />
         </Switch>
     </Router>
