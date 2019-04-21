@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
-import { DatePicker, Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Icon, List, Avatar, Button } from 'antd';
 import emmetAPI from '../emmetAPI';
 import 'antd/dist/antd.css';
 import './ContentWrapper.css';
@@ -10,6 +10,24 @@ import './ContentWrapper.css';
 const {
   Header, Content, Footer, Sider,
 } = Layout;
+
+const listData = [];
+for (let i = 0; i < 23; i++) {
+  listData.push({
+    href: 'http://ant.design',
+    title: `ant design part ${i}`,
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+    content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+  });
+}
+
+const IconText = ({ type, text }) => (
+  <span>
+    <Icon type={type} style={{ marginRight: 8 }} />
+    {text}
+  </span>
+);
 
 class ContentWrapper extends Component {
   static propTypes = {
@@ -19,7 +37,7 @@ class ContentWrapper extends Component {
   };
 
   state = {
-    response: '',
+    response: [],
     name: '',
     location: '',
     responseToPost: '',
@@ -33,14 +51,23 @@ class ContentWrapper extends Component {
 
   componentDidMount() {
     this.callApi()
-      .then(res => this.setState({ response: res.express }))
+      .then(res => this.setState({ response: res.stores }))
       .catch(err => console.log(err));
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location !== this.props.location) {
+      console.log('call api')
+      this.callApi()
+      .then(res => this.setState({ response: res.stores }))
+      .catch(err => console.log(err));
+    }
+  }
+
   callApi = async () => {
-    const response = await emmetAPI.getUrl('/api/v1/stores');
+    const location = this.props.location.pathname.split('/')[1];
+    const response = await emmetAPI.getUrl(`/api/v1/${location}`);
     const body = await response.json();
-    console.log('body', body)
     if (response.status !== 200) throw Error(body.message);
     return body;
   };
@@ -62,7 +89,7 @@ class ContentWrapper extends Component {
   };
 
   render() {
-    console.log('location.pathname', this.props.location.pathname);
+    const stores = this.state.response || [];
 
     return (
       <Layout style={{ minHeight: '100vh' }}>
@@ -74,55 +101,39 @@ class ContentWrapper extends Component {
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
             <Menu.Item key="1">
-              <Icon type="pie-chart" />
-              <Link to="/stores">Stores</Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Icon type="desktop" />
-              <Link to="/menus">Menus</Link>
-            </Menu.Item>
-            <Menu.Item key="9">
-              <Icon type="file" />
-              <Link to="/orders">Orders</Link>
+              <Link to="/stores">
+                <Button>Stores</Button>
+              </Link>
             </Menu.Item>
           </Menu>
         </Sider>
         <Layout>
-          <Header style={{ background: '#fff', padding: 0 }} />
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
+          <Header style={{ background: '#fff', padding: 10, display: 'flex', justifyContent: 'flex-end' }}>
+            <Link to="/stores/new">
+              <Button type="primary">Add Store</Button>
+            </Link>
+          </Header>
+          <Content style={{ margin: '24px 16px 0' }}>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-
-            < div className="App">
-                <p>{this.state.response}</p>
-                <form onSubmit={this.handleSubmit}>
-                  <p>
-                    <strong>Store Name:</strong>
-                  </p>
-                  <input
-                    type="text"
-                    value={this.state.name}
-                    onChange={e => this.setState({ name: e.target.value })}
-                  />
-                  <p>
-                    <strong>Store Location:</strong>
-                  </p>
-                  <input
-                    type="text"
-                    value={this.state.location}
-                    onChange={e => this.setState({ location: e.target.value })}
-                  />
-                  <p>
-                    <button type="submit">Submit</button>
-                  </p>
-                </form>
-                <p>{this.state.responseToPost}</p>
-                <DatePicker />
-              </div>
-
+              <List
+                itemLayout="vertical"
+                size="large"
+                dataSource={stores}
+                renderItem={item => (
+                  <List.Item
+                    key={item.name}
+                    actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
+                    extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
+                  >
+                    <List.Item.Meta
+                      avatar={<Avatar src={item.name} />}
+                      title={<a href={item.href}>{item.location}</a>}
+                      description={item.location}
+                    />
+                    {item.name}, {item.location}
+                  </List.Item>
+                )}
+              />
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
