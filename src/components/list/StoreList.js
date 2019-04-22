@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 import { Icon, List, Avatar } from 'antd';
+import emmetAPI from '../../emmetAPI';
 import 'antd/dist/antd.css';
 import './StoreList.css';
 
@@ -36,6 +37,29 @@ class StoreList extends Component {
     location: '',
     responseToPost: '',
     collapsed: false,
+  };
+
+  componentDidMount() {
+    this.callApi()
+      .then(res => this.setState({ response: res.stores }))
+      .catch(err => console.log(err));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location !== this.props.location) {
+      console.log('call api')
+      this.callApi()
+      .then(res => this.setState({ response: res.stores }))
+      .catch(err => console.log(err));
+    }
+  }
+
+  callApi = async () => {
+    const location = this.props.location.pathname.split('/')[1];
+    const response = await emmetAPI.getUrl(`/api/v1/${location}`);
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    return body;
   };
 
   render() {
