@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import { Link, Route, BrowserRouter as Router } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { Layout, Button } from 'antd';
 import 'antd/dist/antd.css';
 import './ContentWrapper.css';
-import Notfound from './notfound';
 import StoreList from './list/StoreList';
-import CreateForm from './form/CreateForm';
 import SideMenu from './sidemenu/SideMenu';
+import CreateForm from './form/CreateForm';
 
 const {
   Header, Content, Footer,
@@ -36,7 +35,6 @@ class ContentWrapper extends Component {
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <SideMenu />
-
         <Layout>
           <Header style={{ background: '#fff', padding: 10, display: 'flex', justifyContent: 'flex-end' }}>
             <Link to="/stores/new">
@@ -45,11 +43,8 @@ class ContentWrapper extends Component {
           </Header>
           <Content style={{ margin: '24px 16px 0' }}>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-              <Router>
-                <Route exact path="/stores" component={StoreList} />
-                <Route exact path="/stores/new" component={CreateForm} />
-                <Route component={Notfound} />
-              </Router>
+              <Route exact path="/stores/new" component={CreateForm} />
+              <Route exact path="/stores" component={StoreList} />
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
