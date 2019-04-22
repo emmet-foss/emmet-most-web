@@ -5,14 +5,14 @@ import './index.css';
 import App from './App';
 import Notfound from './components/notfound';
 import ContentWrapper from './components/ContentWrapper';
-
 import * as serviceWorker from './serviceWorker';
 
 const routing = (
     <Router>
         <Switch>
             <Route exact path="/" component={App} />
-            <Route path="/stores" component={ContentWrapper} />
+            <Route exact path="/stores" component={ContentWrapper} />
+            <Route exact path="/stores/new" component={ContentWrapper} />
             <Route component={Notfound} />
         </Switch>
     </Router>

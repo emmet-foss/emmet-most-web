@@ -1,27 +1,42 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
+import PropTypes from "prop-types";
+import { withRouter } from "react-router";
 import { Layout, Menu, Icon } from 'antd';
 import 'antd/dist/antd.css';
 import './SideMenu.css';
 
 const { Sider } = Layout;
 
-const SideMenu = () => {
-  return (
-    <Sider
-      collapsible
-    >
-      <div className="logo" />
-      <Menu theme="dark" mode="inline">
-        <Menu.Item key="1">
-          <Icon type="home" /><Link to="/">Home</Link>
-        </Menu.Item>
-        <Menu.Item key="2">
-          <Icon type="desktop" /><Link to="/stores">Stores</Link>
-        </Menu.Item>
-      </Menu>
-    </Sider>
-  );
+class SideMenu extends Component {
+
+  static propTypes = {
+    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
+  };
+
+  onClick = (e) => {
+    console.log('loc', e.key);
+    this.props.history.push(e.key);
+  }
+
+  render() {
+    return (
+      <Sider
+        collapsible
+      >
+        <div className="logo" />
+        <Menu theme="dark" mode="inline" onClick={this.onClick}>
+          <Menu.Item key="/">
+            <Icon type="home" /><span>Home</span>
+          </Menu.Item>
+          <Menu.Item key="/stores">
+            <Icon type="desktop" /><span>Stores</span>
+          </Menu.Item>
+        </Menu>
+      </Sider>
+    );
+  }
 }
 
-export default SideMenu;
+export default withRouter(SideMenu);
