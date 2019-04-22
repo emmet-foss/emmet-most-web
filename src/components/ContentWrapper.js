@@ -37,9 +37,6 @@ class ContentWrapper extends Component {
               <Route exact path="/stores" component={StoreList} />
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
-            Ant Design ©2018 Created by Ant UED
-          </Footer>
         </Layout>
       </Layout>
     );
