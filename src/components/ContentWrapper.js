@@ -13,17 +13,6 @@ const {
   Header, Content, Footer,
 } = Layout;
 
-const listData = [];
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'http://ant.design',
-    title: `ant design part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
-
 class ContentWrapper extends Component {
   static propTypes = {
     match: PropTypes.object.isRequired,
@@ -32,13 +21,14 @@ class ContentWrapper extends Component {
   };
 
   render() {
+    const isAdd = this.props.location.pathname.indexOf('new') >= 0;
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <SideMenu />
         <Layout>
           <Header style={{ background: '#fff', padding: 10, display: 'flex', justifyContent: 'flex-end' }}>
             <Link to="/stores/new">
-              <Button type="primary">Add Store</Button>
+              <Button type="primary" disabled={isAdd}>Add Store</Button>
             </Link>
           </Header>
           <Content style={{ margin: '24px 16px 0' }}>
