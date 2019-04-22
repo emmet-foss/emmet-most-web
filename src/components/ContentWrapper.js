@@ -5,12 +5,12 @@ import { withRouter } from "react-router";
 import { Layout, Button } from 'antd';
 import 'antd/dist/antd.css';
 import './ContentWrapper.css';
-import StoreList from './list/StoreList';
+import { StoreList, MenuList } from './list';
 import SideMenu from './sidemenu/SideMenu';
 import CreateForm from './form/CreateForm';
 
 const {
-  Header, Content, Footer,
+  Header, Content,
 } = Layout;
 
 class ContentWrapper extends Component {
@@ -35,6 +35,7 @@ class ContentWrapper extends Component {
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
               <Route exact path="/stores/new" component={CreateForm} />
               <Route exact path="/stores" component={StoreList} />
+              <Route exact path="/stores/:id/menus" component={MenuList} />
             </div>
           </Content>
         </Layout>
