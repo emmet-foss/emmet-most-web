@@ -74,7 +74,7 @@ class StoreList extends Component {
           renderItem={item => (
             <List.Item
               key={item.name}
-              actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
+              actions={[<IconText type="edit" text="Edit" />, <IconText type="delete" text="Delete" />, <IconText type="like-o" text="Like" />]}
               extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
             >
               <List.Item.Meta
