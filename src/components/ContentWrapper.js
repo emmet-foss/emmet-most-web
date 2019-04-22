@@ -32,13 +32,14 @@ class ContentWrapper extends Component {
   };
 
   render() {
+    const isAdd = this.props.location.pathname.indexOf('new') >= 0;
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <SideMenu />
         <Layout>
           <Header style={{ background: '#fff', padding: 10, display: 'flex', justifyContent: 'flex-end' }}>
             <Link to="/stores/new">
-              <Button type="primary">Add Store</Button>
+              <Button type="primary" disabled={isAdd}>Add Store</Button>
             </Link>
           </Header>
           <Content style={{ margin: '24px 16px 0' }}>
