@@ -12,6 +12,7 @@ const routing = (
         <Switch>
             <Route exact path="/" component={App} />
             <Route exact path="/stores" component={ContentWrapper} />
+            <Route exact path="/menus" component={ContentWrapper} />
             <Route exact path="/stores/new" component={ContentWrapper} />
             <Route exact path="/stores/:id/menus" component={ContentWrapper} />
             <Route component={Notfound} />
