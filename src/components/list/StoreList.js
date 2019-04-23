@@ -78,9 +78,9 @@ class StoreList extends Component {
             <List.Item
               key={item.name}
               actions={[
-                <IconText type="edit" text="Edit" id={item._id} url="menus" />,
-                <IconText type="delete" text="Delete" id={item._id} url="remove" />,
-                <IconText type="like-o" text="Like" id={item._id} url="like" />]}
+                <IconText type="book" id={item._id} url="menus" />,
+                <IconText type="delete" id={item._id} url="remove" />,
+                <IconText type="like-o" id={item._id} url="like" />]}
               extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
             >
               <List.Item.Meta
