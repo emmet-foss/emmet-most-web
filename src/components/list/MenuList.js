@@ -41,7 +41,7 @@ class MenuList extends Component {
 
   componentDidMount() {
     this.callApi()
-      .then(res => this.setState({ response: res.stores }))
+      .then(res => this.setState({ response: res.menus }))
       .catch(err => console.log(err));
   }
 
@@ -49,14 +49,15 @@ class MenuList extends Component {
     if (nextProps.location !== this.props.location) {
       console.log('call api')
       this.callApi()
-      .then(res => this.setState({ response: res.stores }))
+      .then(res => this.setState({ response: res.menus }))
       .catch(err => console.log(err));
     }
   }
 
   callApi = async () => {
-    const { id } = this.props.match.params;
-    const response = await emmetAPI.getUrl(`/api/v1/stores/${id}/menus`);
+    const { storeId } = this.props.match.params;
+    const response = await emmetAPI.getUrl(`/api/v1/stores/${storeId}/menus`);
+    console.log('response', response)
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
@@ -65,14 +66,14 @@ class MenuList extends Component {
   render() {
     const { id } = this.props.match.params;
     console.log('this.props.storeId', id);
-    const stores = this.state.response || [];
+    const menus = this.state.response || [];
 
     return (
       <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
         <List
           itemLayout="vertical"
           size="large"
-          dataSource={stores}
+          dataSource={menus}
           renderItem={item => (
             <List.Item
               key={item.name}
@@ -81,10 +82,10 @@ class MenuList extends Component {
             >
               <List.Item.Meta
                 avatar={<Avatar src={item.name} />}
-                title={<a href={item.href}>{item.location}</a>}
-                description={item.location}
+                title={<a href={item.name}>{item.name}</a>}
+                description={item.name}
               />
-              {item.name}, {item.location}
+              {item.name}
             </List.Item>
           )}
         />
