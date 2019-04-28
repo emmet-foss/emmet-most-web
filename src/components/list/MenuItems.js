@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { Icon, List, Avatar } from 'antd';
 import emmetAPI from '../../emmetAPI';
 import 'antd/dist/antd.css';
-import './StoreList.css';
+import './List.css';
 
 const listData = [];
 for (let i = 0; i < 23; i++) {
@@ -18,16 +17,14 @@ for (let i = 0; i < 23; i++) {
   });
 }
 
-const IconText = ({ type, text, id, url }) => (
+const IconText = ({ type, text }) => (
   <span>
-    <Link to={`/stores/${id}/${url}`}>
-      <Icon type={type} style={{ marginRight: 8 }} />
-      {text}
-    </Link>
+    <Icon type={type} style={{ marginRight: 8 }} />
+    {text}
   </span>
 );
 
-class StoreList extends Component {
+class MenuItems extends Component {
   static propTypes = {
     match: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -44,7 +41,7 @@ class StoreList extends Component {
 
   componentDidMount() {
     this.callApi()
-      .then(res => this.setState({ response: res.stores }))
+      .then(res => this.setState({ response: res.menus }))
       .catch(err => console.log(err));
   }
 
@@ -52,43 +49,43 @@ class StoreList extends Component {
     if (nextProps.location !== this.props.location) {
       console.log('call api')
       this.callApi()
-      .then(res => this.setState({ response: res.stores }))
+      .then(res => this.setState({ response: res.menus }))
       .catch(err => console.log(err));
     }
   }
 
   callApi = async () => {
-    const location = this.props.location.pathname.split('/')[1];
-    const response = await emmetAPI.getUrl(`/api/v1/${location}`);
+    const { storeId, menuId } = this.props.match.params;
+    const response = await emmetAPI.getUrl(`/api/v1/stores/${storeId}/menus/${menuId}`);
+    console.log('response', response)
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
   };
 
   render() {
-    const stores = this.state.response || [];
+    const { id } = this.props.match.params;
+    console.log('this.props.storeId', id);
+    const menuItems = this.state.response || [];
 
     return (
       <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
         <List
           itemLayout="vertical"
           size="large"
-          dataSource={stores}
+          dataSource={menuItems}
           renderItem={item => (
             <List.Item
               key={item.name}
-              actions={[
-                <IconText type="book" id={item._id} url="menus" />,
-                <IconText type="delete" id={item._id} url="remove" />,
-                <IconText type="like-o" id={item._id} url="like" />]}
+              actions={[<IconText type="edit" text="Edit" />, <IconText type="delete" text="Delete" />, <IconText type="like-o" text="Like" />]}
               extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
             >
               <List.Item.Meta
                 avatar={<Avatar src={item.name} />}
-                title={<a href={item.href}>{item.location}</a>}
-                description={item.location}
+                title={<a href={item.name}>{item.name}</a>}
+                description={item.name}
               />
-              {item.name}, {item.location}
+              {item.name}
             </List.Item>
           )}
         />
@@ -97,4 +94,4 @@ class StoreList extends Component {
   }
 }
 
-export default withRouter(StoreList);
+export default withRouter(MenuItems);
