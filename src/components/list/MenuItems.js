@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
-import { Icon, List, Avatar } from 'antd';
+import { List, Avatar } from 'antd';
 import emmetAPI from '../../emmetAPI';
 import 'antd/dist/antd.css';
 import './List.css';
@@ -16,13 +16,6 @@ for (let i = 0; i < 23; i++) {
     content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
   });
 }
-
-const IconText = ({ type, text }) => (
-  <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-    {text}
-  </span>
-);
 
 class MenuItems extends Component {
   static propTypes = {
@@ -41,31 +34,27 @@ class MenuItems extends Component {
 
   componentDidMount() {
     this.callApi()
-      .then(res => this.setState({ response: res.menus }))
+      .then(res => this.setState({ response: res.menuItems }))
       .catch(err => console.log(err));
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.location !== this.props.location) {
-      console.log('call api')
       this.callApi()
-      .then(res => this.setState({ response: res.menus }))
-      .catch(err => console.log(err));
+        .then(res => this.setState({ response: res.menuItems }))
+        .catch(err => console.log(err));
     }
   }
 
   callApi = async () => {
     const { storeId, menuId } = this.props.match.params;
     const response = await emmetAPI.getUrl(`/api/v1/stores/${storeId}/menus/${menuId}`);
-    console.log('response', response)
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
   };
 
   render() {
-    const { id } = this.props.match.params;
-    console.log('this.props.storeId', id);
     const menuItems = this.state.response || [];
 
     return (
@@ -77,7 +66,6 @@ class MenuItems extends Component {
           renderItem={item => (
             <List.Item
               key={item.name}
-              actions={[<IconText type="edit" text="Edit" />, <IconText type="delete" text="Delete" />, <IconText type="like-o" text="Like" />]}
               extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
             >
               <List.Item.Meta

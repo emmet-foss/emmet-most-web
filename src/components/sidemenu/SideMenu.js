@@ -16,7 +16,6 @@ class SideMenu extends Component {
   };
 
   onClick = (e) => {
-    console.log('loc', e.key);
     this.props.history.push(e.key);
   }
 
