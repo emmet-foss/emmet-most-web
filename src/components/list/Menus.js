@@ -51,7 +51,6 @@ class Menus extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.location !== this.props.location) {
-      console.log('call api')
       this.callApi()
       .then(res => this.setState({ response: res.menus }))
       .catch(err => console.log(err));
@@ -61,16 +60,13 @@ class Menus extends Component {
   callApi = async () => {
     const { storeId } = this.props.match.params;
     const response = await emmetAPI.getUrl(`/api/v1/stores/${storeId}/menus`);
-    console.log('response', response)
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
   };
 
   render() {
-    const { storeId, menuId } = this.props.match.params;
-    console.log('this.props.storeId', storeId);
-    console.log('this.props.menuId', menuId);
+    const { storeId } = this.props.match.params;
     const menus = this.state.response || [];
 
     return (

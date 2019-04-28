@@ -17,8 +17,8 @@ class CreateMenuItem extends Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const { storeId } = this.props.match.params;
-    const response = await emmetAPI.fetchUrl(`/api/v1/stores/${storeId}/menus`, {
+    const { storeId, menuId } = this.props.match.params;
+    const response = await emmetAPI.fetchUrl(`/api/v1/stores/${storeId}/menus/${menuId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ class CreateMenuItem extends Component {
     return (
       <Form {...formItemLayout} onSubmit={this.handleSubmit}>
         <Form.Item
-          label="Menu Name:"
+          label="Menu Item Name:"
         >
           <Input
             value={this.state.name}
