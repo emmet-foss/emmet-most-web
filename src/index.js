@@ -16,6 +16,8 @@ const routing = (
             <Route exact path="/stores/new" component={ContentWrapper} />
             <Route exact path="/stores/:storeId/menus" component={ContentWrapper} />
             <Route exact path="/stores/:storeId/menus/new" component={ContentWrapper} />
+            <Route exact path="/stores/:storeId/menus/:menuId" component={ContentWrapper} />
+            <Route exact path="/stores/:storeId/menus/:menuId/new" component={ContentWrapper} />
             <Route component={Notfound} />
         </Switch>
     </Router>
