@@ -5,7 +5,7 @@ import { withRouter } from "react-router";
 import { Layout, Button } from 'antd';
 import 'antd/dist/antd.css';
 import './ContentWrapper.css';
-import { Stores, Menus, MenuItems, Merchants, StoreOrders } from './list';
+import { Stores, Menus, MenuItems, Merchants, StoreMenuItems } from './list';
 import SideMenu from './sidemenu/SideMenu';
 import { CreateForm, CreateMenu, CreateMenuItem } from './form';
 
@@ -44,7 +44,7 @@ class ContentWrapper extends Component {
 
 
               <Route exact path="/orders" component={Merchants} />
-              <Route exact path="/orders/:storeId" component={StoreOrders} />
+              <Route exact path="/orders/:storeId" component={StoreMenuItems} />
             </div>
           </Content>
         </Layout>
