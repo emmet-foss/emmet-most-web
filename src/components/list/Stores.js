@@ -50,7 +50,6 @@ class Stores extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.location !== this.props.location) {
-      console.log('call api')
       this.callApi()
       .then(res => this.setState({ response: res.stores }))
       .catch(err => console.log(err));
@@ -67,6 +66,7 @@ class Stores extends Component {
 
   render() {
     const stores = this.state.response || [];
+    const location = this.props.location.pathname.split('/')[1];
 
     return (
       <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
@@ -78,17 +78,17 @@ class Stores extends Component {
             <List.Item
               key={item.name}
               actions={[
-                <IconText type="book" id={item._id} url="menus" />,
-                <IconText type="delete" id={item._id} url="remove" />,
-                <IconText type="like-o" id={item._id} url="like" />]}
+                <IconText type="book" id={item._id} url="menus" location={location} />,
+                <IconText type="delete" id={item._id} url="remove" location={location} />,
+                <IconText type="like-o" id={item._id} url="like" location={location} />]}
               extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
             >
               <List.Item.Meta
                 avatar={<Avatar src={item.name} />}
-                title={<a href={item.href}>{item.location}</a>}
+                title={item.name}
                 description={item.location}
               />
-              {item.name}, {item.location}
+              {item.description}
             </List.Item>
           )}
         />

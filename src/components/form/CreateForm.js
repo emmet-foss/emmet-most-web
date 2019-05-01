@@ -11,6 +11,7 @@ class CreateForm extends Component {
     response: [],
     name: '',
     location: '',
+    description: '',
     responseToPost: '',
     collapsed: false,
   };
@@ -24,7 +25,8 @@ class CreateForm extends Component {
       },
       body: JSON.stringify({ 
         name: this.state.name, 
-        location: this.state.location
+        location: this.state.location,
+        description: this.state.description
       }),
     });
     const body = await response.text();
@@ -71,6 +73,14 @@ class CreateForm extends Component {
           <Input 
             value={this.state.location}
             onChange={e => this.setState({ location: e.target.value })}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Description"
+        >
+          <Input 
+            value={this.state.description}
+            onChange={e => this.setState({ description: e.target.value })}
           />
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>

@@ -32,8 +32,8 @@ class SideMenu extends Component {
           <Menu.Item key="/stores">
             <Icon type="shop" /><span>Stores</span>
           </Menu.Item>
-          <Menu.Item key="/menus">
-            <Icon type="book" /><span>Menus</span>
+          <Menu.Item key="/orders">
+            <Icon type="book" /><span>Orders</span>
           </Menu.Item>
         </Menu>
       </Sider>
