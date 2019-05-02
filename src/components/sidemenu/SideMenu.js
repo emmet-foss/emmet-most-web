@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
+import { NavLink } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 import 'antd/dist/antd.css';
 import './SideMenu.css';
@@ -20,20 +21,36 @@ class SideMenu extends Component {
   }
 
   render() {
+    const { location } = this.props;
     return (
-      <Sider
-        collapsible
-      >
+      <Sider collapsible>
         <div className="logo" />
-        <Menu theme="dark" mode="inline" onClick={this.onClick}>
+        <Menu
+          theme="dark"
+          mode="inline"
+          defaultSelectedKeys={['/']}
+          onClick={this.onClick}
+          selectedKeys={[location.pathname]}
+        >
           <Menu.Item key="/">
-            <Icon type="home" /><span>Home</span>
+            <NavLink to="/">
+              <Icon type="home" /><span>Home</span>
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="/stores">
-            <Icon type="shop" /><span>Stores</span>
+            <NavLink to="/stores">
+              <Icon type="shop" /><span>Stores</span>
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="/orders">
-            <Icon type="book" /><span>Orders</span>
+            <NavLink to="/orders">
+              <Icon type="book" /><span>Orders</span>
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key="/checkout">
+            <NavLink to="/checkout">
+              <Icon type="shopping-cart" /><span>Checkout</span>
+            </NavLink>
           </Menu.Item>
         </Menu>
       </Sider>
