@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router";
-import { Layout, Button } from 'antd';
+import { Layout, Button, Icon } from 'antd';
 import 'antd/dist/antd.css';
 import './ContentWrapper.css';
 import { Stores, Menus, MenuItems, Merchants, StoreMenuItems } from './list';
@@ -23,15 +23,27 @@ class ContentWrapper extends Component {
   render() {
     const isAdd = this.props.location.pathname.indexOf('new') >= 0;
     const newUrl = this.props.location.pathname + '/new'
+    const isStore = this.props.location.pathname.indexOf('/stores') === 0;
+    const isOrder = this.props.location.pathname.indexOf('/orders') === 0;
 
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <SideMenu />
         <Layout>
           <Header style={{ background: '#fff', padding: 10, display: 'flex', justifyContent: 'flex-end' }}>
-            <Link to={newUrl}>
-              <Button type="primary" disabled={isAdd}>Add</Button>
-            </Link>
+            {isStore &&
+              <Link to={newUrl}>
+                <Button type="primary" disabled={isAdd}>Add</Button>
+              </Link>
+            }
+            {isOrder &&
+              <Link to="/checkout">
+                <Button type="primary">
+                  <Icon type="shopping-cart"/>Checkout
+                </Button>
+                
+              </Link>
+            }
           </Header>
           <Content style={{ margin: '24px 16px 0' }}>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
@@ -42,9 +54,10 @@ class ContentWrapper extends Component {
               <Route exact path="/stores/:storeId/menus/:menuId" component={MenuItems} />
               <Route exact path="/stores/:storeId/menus/:menuId/new" component={CreateMenuItem} />
 
-
               <Route exact path="/orders" component={Merchants} />
               <Route exact path="/orders/:storeId" component={StoreMenuItems} />
+
+              <Route exact path="/checkout" component={Merchants} />
             </div>
           </Content>
         </Layout>
