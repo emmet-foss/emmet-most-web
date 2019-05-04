@@ -3,11 +3,15 @@ import PropTypes from "prop-types";
 import { Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { Layout, Button, Icon } from 'antd';
+import Cookies from 'js-cookie';
+
+import { Stores, Menus, MenuItems, Merchants, StoreMenuItems } from './list';
+import { CreateForm, CreateMenu, CreateMenuItem, Login } from './form';
+import { Home } from './dashboard';
+import SideMenu from './sidemenu/SideMenu';
+
 import 'antd/dist/antd.css';
 import './ContentWrapper.css';
-import { Stores, Menus, MenuItems, Merchants, StoreMenuItems } from './list';
-import SideMenu from './sidemenu/SideMenu';
-import { CreateForm, CreateMenu, CreateMenuItem } from './form';
 
 const {
   Header, Content,
@@ -58,6 +62,9 @@ class ContentWrapper extends Component {
               <Route exact path="/orders/:storeId" component={StoreMenuItems} />
 
               <Route exact path="/checkout" component={Merchants} />
+
+              <Route exact path="/me" component={Home} />
+              <Route exact path="/login" component={Login} />
             </div>
           </Content>
         </Layout>

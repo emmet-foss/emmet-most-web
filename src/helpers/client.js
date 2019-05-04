@@ -29,6 +29,7 @@ class Client {
   fetchUrl(url, request) {
     return fetch(this.address + url, {
       body: request.body || {},
+      credentials: request.credentials || '',
       headers: request.headers || {},
       method: request.method || {},
       mode: request.mode || 'cors',
