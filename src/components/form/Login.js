@@ -31,7 +31,6 @@ class Login extends Component {
       }),
     })
     .then(res => {
-      console.log('token', res.token)
       if (res.status === 200) {
         this.props.history.push('/me');
       } else {

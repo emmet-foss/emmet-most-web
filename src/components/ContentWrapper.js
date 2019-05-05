@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { Layout, Button, Icon } from 'antd';
-import Cookies from 'js-cookie';
 
 import { Stores, Menus, MenuItems, Merchants, StoreMenuItems } from './list';
 import { CreateForm, CreateMenu, CreateMenuItem, Login } from './form';
@@ -51,6 +50,8 @@ class ContentWrapper extends Component {
           </Header>
           <Content style={{ margin: '24px 16px 0' }}>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+              <Route exact path="/" component={Home} />
+
               <Route exact path="/stores" component={Stores} />
               <Route exact path="/stores/new" component={CreateForm} />
               <Route exact path="/stores/:storeId/menus" component={Menus} />
@@ -63,7 +64,6 @@ class ContentWrapper extends Component {
 
               <Route exact path="/checkout" component={Merchants} />
 
-              <Route exact path="/me" component={Home} />
               <Route exact path="/login" component={Login} />
             </div>
           </Content>
