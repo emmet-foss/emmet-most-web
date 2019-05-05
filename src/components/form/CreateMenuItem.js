@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+
 import emmetAPI from '../../emmetAPI';
 import {
-  Form, Input, Button,
+  Form, Input, Button, DatePicker
 } from 'antd';
 import 'antd/dist/antd.css';
 import './CreateForm.css';
@@ -10,6 +11,7 @@ class CreateMenuItem extends Component {
   state = {
     response: [],
     name: '',
+    date_available: null,
     location: '',
     responseToPost: '',
     collapsed: false,
@@ -24,12 +26,17 @@ class CreateMenuItem extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ 
-        name: this.state.name
+        name: this.state.name,
+        date_available: this.state.date_available,
       }),
     });
     const body = await response.text();
     this.setState({ responseToPost: body });
   };
+
+  setDate = async (date_available) => {
+    this.setState({ date_available })
+  }
 
   render() {
     const formItemLayout = {
@@ -63,6 +70,15 @@ class CreateMenuItem extends Component {
           <Input
             value={this.state.name}
             onChange={e => this.setState({ name: e.target.value })}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Date Available:"
+        >
+          <DatePicker
+            placeholder="Select Date"
+            value={this.state.date_available}
+            onChange={this.setDate}
           />
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
