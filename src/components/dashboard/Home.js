@@ -1,5 +1,16 @@
 import React, { Component } from 'react';
-import { PageHeader, Statistic, Row, Col, Select, DatePicker, List } from 'antd';
+import Cookies from 'js-cookie';
+import {
+  PageHeader,
+  Statistic,
+  Row,
+  Col,
+  Select,
+  DatePicker,
+  List,
+  Button,
+  Avatar,
+} from 'antd';
 
 import emmetAPI from '../../emmetAPI';
 
@@ -15,7 +26,7 @@ class Home extends Component {
     menus: [],
     selectedMenu: '',
     date_available: null,
-    menus_available: [],
+    menuItemsAvailable: [],
     loading: false,
     menuItemsQueried: false,
   };
@@ -55,7 +66,7 @@ class Home extends Component {
       menus: [],
       selectedMenu: '',
       date_available: null,
-      menus_available: [],
+      menuItemsAvailable: [],
     });
     this.getMenus(location)
       .then(res => {
@@ -85,12 +96,39 @@ class Home extends Component {
       .then(res => {
         this.setState({
           loading: false,
-          menus_available: res.menuItems,
+          menuItemsAvailable: res.menuItems,
         })
       })
       .catch(err => console.log(err));
   };
 
+  addToCart = async(e) => {
+    const token = Cookies.get('token');
+    const menuItemId = e.target.dataset.menu_item_id
+    console.log('menuItemId', menuItemId)
+    emmetAPI.fetchUrl(`/api/v1/cart?token=${token}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        menuItemId
+      }),
+    })
+    .then(res => {
+      if (res.status === 200) {
+        console.log('Added to cart')
+      } else {
+        const error = new Error(res.error);
+        throw error;
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Error logging in please try again');
+    });
+  }
 
   render() {
     const {
@@ -99,27 +137,36 @@ class Home extends Component {
       loading,
       selectedLocation,
       selectedMenu,
-      menus_available,
+      menuItemsAvailable,
       menuItemsQueried,
     } = this.state;
     const displayMenus = !loading && selectedLocation !== '';
     const displayDate = selectedMenu !== '';
 
     let menusDisplay = null
-    if (menus_available.length > 0) {
+    if (menuItemsAvailable.length > 0) {
       menusDisplay = (
         <Row>
           <Col span={12}>
             <Statistic value="Here are the menus available:" />
             <List
-              itemLayout="vertical"
+              itemLayout="horizontal"
+              bordered
               size="large"
-              dataSource={this.state.menus_available}
-              renderItem={menu => (
+              dataSource={this.state.menuItemsAvailable}
+              renderItem={menuItem => (
                 <List.Item
-                  key={menu.name}
+                  key={menuItem.name}
                 >
-                  {menu.name}
+                  <List.Item.Meta
+                    avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                    title={menuItem.name}
+                  />
+                  <div>
+                    <Button type="primary" data-menu_item_id={menuItem._id} onClick={this.addToCart}>
+                      Add to Cart
+                    </Button>
+                  </div>
                 </List.Item>
               )}
             />
