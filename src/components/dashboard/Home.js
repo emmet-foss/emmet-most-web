@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { PageHeader, Statistic, Row, Col, Select, DatePicker } from 'antd';
+import { PageHeader, Statistic, Row, Col, Select, DatePicker, List } from 'antd';
 
 import emmetAPI from '../../emmetAPI';
 
@@ -14,7 +14,10 @@ class Home extends Component {
     selectedLocation: '',
     menus: [],
     selectedMenu: '',
+    date_available: null,
+    menus_available: [],
     loading: false,
+    menuItemsQueried: false,
   };
 
   componentDidMount() {
@@ -45,8 +48,15 @@ class Home extends Component {
     return body;
   };
 
-  getStoreMenus = async (location) => {
-    this.setState({ loading: true, selectedLocation: location });
+  handleLocationChange = async (location) => {
+    this.setState({
+      loading: true,
+      selectedLocation: location,
+      menus: [],
+      selectedMenu: '',
+      date_available: null,
+      menus_available: [],
+    });
     this.getMenus(location)
       .then(res => {
         this.setState({
@@ -61,10 +71,70 @@ class Home extends Component {
     this.setState({ selectedMenu });
   }
 
+  getMenuItemsAvailable = async (location, date_available) => {
+    const { selectedMenu } = this.state
+    const response = await emmetAPI.getUrl(`/api/v1/stores/menu_items?menuId=${selectedMenu}&location=${location}&date_available=${date_available}`)
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    return body;
+  };
+
+  queryAvailableMenuItems = async (date_available, dateString) => {
+    this.setState({ date_available, menuItemsQueried: true });
+    this.getMenuItemsAvailable(this.state.selectedLocation, dateString)
+      .then(res => {
+        this.setState({
+          loading: false,
+          menus_available: res.menuItems,
+        })
+      })
+      .catch(err => console.log(err));
+  };
+
+
   render() {
-    const { locations, menus, loading, selectedLocation, selectedMenu } = this.state;
+    const {
+      locations,
+      menus,
+      loading,
+      selectedLocation,
+      selectedMenu,
+      menus_available,
+      menuItemsQueried,
+    } = this.state;
     const displayMenus = !loading && selectedLocation !== '';
     const displayDate = selectedMenu !== '';
+
+    let menusDisplay = null
+    if (menus_available.length > 0) {
+      menusDisplay = (
+        <Row>
+          <Col span={12}>
+            <Statistic value="Here are the menus available:" />
+            <List
+              itemLayout="vertical"
+              size="large"
+              dataSource={this.state.menus_available}
+              renderItem={menu => (
+                <List.Item
+                  key={menu.name}
+                >
+                  {menu.name}
+                </List.Item>
+              )}
+            />
+          </Col>
+        </Row>
+      )
+    } else {
+      menusDisplay = (
+        <Row>
+          <Col span={12}>
+            <Statistic value="No Menu Available." />
+          </Col>
+        </Row>
+      )
+    }
 
     return (
       <PageHeader
@@ -77,10 +147,10 @@ class Home extends Component {
                 <Statistic value="Where will you be attending?" />
                 <Select
                   showSearch
-                  style={{ width: 150 }}
+                  style={{ width: '100%' }}
                   placeholder="Search a location"
                   dropdownMatchSelectWidth={false}
-                  onChange={this.getStoreMenus}
+                  onChange={this.handleLocationChange}
                   value={selectedLocation}
                 >
                   {locations.map(location => {
@@ -95,7 +165,7 @@ class Home extends Component {
                   <Statistic value="What will you be ordering?" />
                   <Select
                     showSearch
-                    style={{ width: 150 }}
+                    style={{ width: '100%' }}
                     placeholder="Choose a menu"
                     dropdownMatchSelectWidth={false}
                     onChange={this.handleMenuSelect}
@@ -114,13 +184,15 @@ class Home extends Component {
             {displayDate &&
               <Row>
                 <Col span={12}>
-                  <Statistic value="When will you be attending?" />
+                  <Statistic value="When will you attend?" />
                   <DatePicker
                     placeholder="Select Time"
+                    onChange={this.queryAvailableMenuItems}
                   />
                 </Col>
               </Row>
             }
+            {menuItemsQueried && menusDisplay}
           </div>
         </div>
       </PageHeader>
