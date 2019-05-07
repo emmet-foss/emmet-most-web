@@ -153,7 +153,7 @@ class Home extends Component {
     if (menuItemsAvailable.length > 0) {
       menusDisplay = (
         <Row>
-          <Col span={12}>
+          <Col xs={24} sm={24} md={24} lg={12}>
             <Statistic value="Here are the menus available:" />
             <List
               itemLayout="horizontal"
@@ -182,7 +182,7 @@ class Home extends Component {
     } else {
       menusDisplay = (
         <Row>
-          <Col span={12}>
+          <Col xs={24} sm={24} md={24} lg={12}>
             <Statistic value="No Menu Available." />
           </Col>
         </Row>
@@ -196,7 +196,7 @@ class Home extends Component {
         <div className="wrap">
           <div className="extraContent">
             <Row>
-              <Col span={12}>
+              <Col xs={24} sm={24} md={24} lg={12}>
                 <Statistic value="Where will you be attending?" />
                 <Select
                   showSearch
@@ -214,7 +214,7 @@ class Home extends Component {
             </Row>
             {displayMenus &&
               <Row>
-                <Col span={12}>
+                <Col xs={24} sm={24} md={24} lg={12}>
                   <Statistic value="What will you be ordering?" />
                   <Select
                     showSearch
@@ -236,13 +236,14 @@ class Home extends Component {
             }
             {displayDate &&
               <Row>
-                <Col span={12}>
+                <Col xs={24} sm={24} md={24} lg={12}>
                   <Statistic value="When will you attend?" />
                   <DatePicker
                     placeholder="Select Time"
                     disabledDate={disablePastDates}
                     onChange={this.queryAvailableMenuItems}
                     value={this.state.date_available}
+                    style={{ width: '100%'}}
                   />
                 </Col>
               </Row>
