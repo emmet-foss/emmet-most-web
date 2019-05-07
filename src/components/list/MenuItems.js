@@ -70,10 +70,10 @@ class MenuItems extends Component {
             >
               <List.Item.Meta
                 avatar={<Avatar src={item.name} />}
-                title={<a href={item.name}>{item.name}</a>}
-                description={item.name}
+                title={item.name}
+                description={item.description}
               />
-              {item.name}
+              <div>Available on: {item.date_available}</div>
             </List.Item>
           )}
         />

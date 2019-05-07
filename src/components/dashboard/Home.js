@@ -13,6 +13,7 @@ import {
 } from 'antd';
 
 import emmetAPI from '../../emmetAPI';
+import disablePastDates from '../../helpers/functions';
 
 import 'antd/dist/antd.css';
 import './Home.css';
@@ -234,6 +235,7 @@ class Home extends Component {
                   <Statistic value="When will you attend?" />
                   <DatePicker
                     placeholder="Select Time"
+                    disabledDate={disablePastDates}
                     onChange={this.queryAvailableMenuItems}
                   />
                 </Col>
