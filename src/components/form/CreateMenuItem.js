@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-
-import emmetAPI from '../../emmetAPI';
 import {
   Form, Input, Button, DatePicker
 } from 'antd';
+
+import emmetAPI from '../../emmetAPI';
+import disablePastDates from '../../helpers/functions';
+
 import 'antd/dist/antd.css';
 import './CreateForm.css';
 
@@ -11,6 +13,7 @@ class CreateMenuItem extends Component {
   state = {
     response: [],
     name: '',
+    description: '',
     date_available: null,
     location: '',
     responseToPost: '',
@@ -27,6 +30,7 @@ class CreateMenuItem extends Component {
       },
       body: JSON.stringify({ 
         name: this.state.name,
+        description: this.state.description,
         date_available: this.state.date_available,
       }),
     });
@@ -73,12 +77,21 @@ class CreateMenuItem extends Component {
           />
         </Form.Item>
         <Form.Item
+          label="Description:"
+        >
+          <Input
+            value={this.state.description}
+            onChange={e => this.setState({ description: e.target.value })}
+          />
+        </Form.Item>
+        <Form.Item
           label="Date Available:"
         >
           <DatePicker
             placeholder="Select Date"
             value={this.state.date_available}
             onChange={this.setDate}
+            disabledDate={disablePastDates}
           />
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>

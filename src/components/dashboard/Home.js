@@ -13,6 +13,7 @@ import {
 } from 'antd';
 
 import emmetAPI from '../../emmetAPI';
+import disablePastDates from '../../helpers/functions';
 
 import 'antd/dist/antd.css';
 import './Home.css';
@@ -78,8 +79,13 @@ class Home extends Component {
       .catch(err => console.log(err));
   };
 
-  handleMenuSelect = async (selectedMenu) => {
-    this.setState({ selectedMenu });
+  handleMenuChange = async (selectedMenu) => {
+    this.setState({
+      selectedMenu,
+      menuItemsAvailable: [],
+      date_available: null,
+      menuItemsQueried: false
+    });
   }
 
   getMenuItemsAvailable = async (location, date_available) => {
@@ -215,7 +221,7 @@ class Home extends Component {
                     style={{ width: '100%' }}
                     placeholder="Choose a menu"
                     dropdownMatchSelectWidth={false}
-                    onChange={this.handleMenuSelect}
+                    onChange={this.handleMenuChange}
                     value={selectedMenu}
                   >
                     {loading &&
@@ -234,7 +240,9 @@ class Home extends Component {
                   <Statistic value="When will you attend?" />
                   <DatePicker
                     placeholder="Select Time"
+                    disabledDate={disablePastDates}
                     onChange={this.queryAvailableMenuItems}
+                    value={this.state.date_available}
                   />
                 </Col>
               </Row>
