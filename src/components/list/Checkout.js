@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
+import Cookies from 'js-cookie';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
-import { Icon, List, Avatar, Card, InputNumber, Form } from 'antd';
+import {
+  Avatar,
+  Col,
+  List,
+  Row,
+  Statistic,
+} from 'antd';
+
 import emmetAPI from '../../emmetAPI';
+
 import 'antd/dist/antd.css';
 import './List.css';
-
-const { Meta } = Card;
 
 class Checkout extends Component {
   static propTypes = {
@@ -16,7 +23,7 @@ class Checkout extends Component {
   };
 
   state = {
-    response: [],
+    cart_items: [],
     name: '',
     location: '',
     responseToPost: '',
@@ -24,48 +31,56 @@ class Checkout extends Component {
   };
 
   componentDidMount() {
-    this.callApi()
-      .then(res => this.setState({ response: res.menu_items }))
+    this.getCheckoutItems()
+      .then(res => this.setState({ cart_items: res.cart_items }))
       .catch(err => console.log(err));
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.location !== this.props.location) {
-      this.callApi()
-        .then(res => this.setState({ response: res.menu_items }))
+      this.getCheckoutItems()
+        .then(res => this.setState({ cart_items: res.cart_items }))
         .catch(err => console.log(err));
     }
   }
 
-  callApi = async () => {
-    const { storeId } = this.props.match.params;
-    const response = await emmetAPI.getUrl(`/api/v1/orders/${storeId}`);
+  getCheckoutItems = async () => {
+    const token = Cookies.get('token');
+    const response = await emmetAPI.getUrl(`/api/v1/checkout?token=${token}`);
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
-    console.log('body', body)
     return body;
   };
 
   render() {
-    const menu_items = this.state.response || [];
-    console.log('menu_items', menu_items)
+    const { cart_items } = this.state;
 
     return (
-      <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-        <List
-          grid={{ gutter: 16, column: 3 }}
-          dataSource={menu_items}
-          renderItem={item => (
-            <List.Item key={item._id}>
-              <List.Item.Meta
-                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                title={<a href="https://ant.design">{item.menu_item}</a>}
-                description={item.name}
+      <div className="wrap">
+        <div className="extraContent">
+          <Row>
+            <Col xs={24} sm={24} md={24} lg={12}>
+              <Statistic value="Here are your orders for checkout:" />
+              <List
+                itemLayout="horizontal"
+                bordered
+                size="large"
+                dataSource={cart_items}
+                renderItem={item => (
+                  <List.Item
+                    key={item._id}
+                  >
+                    <List.Item.Meta
+                      avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                      title={item.name}
+                    />
+                    {item.quantity}
+                  </List.Item>
+                )}
               />
-              <div>Content</div>
-            </List.Item>
-          )}
-        />
+            </Col>
+          </Row>
+        </div>
       </div>
     );
   }
