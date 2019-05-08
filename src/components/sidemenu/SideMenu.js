@@ -23,7 +23,10 @@ class SideMenu extends Component {
   render() {
     const { location } = this.props;
     return (
-      <Sider collapsible>
+      <Sider
+        breakpoint="xl"
+        collapsedWidth="0"
+      >
         <div className="logo" />
         <Menu
           theme="dark"
