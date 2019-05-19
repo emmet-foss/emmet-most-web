@@ -108,10 +108,11 @@ class Home extends Component {
       .catch(err => console.log(err));
   };
 
-  addToCart = async(e) => {
+  addToCart = async(menuItem) => {
+    console.log('menuItem', menuItem)
     const token = Cookies.get('token');
-    const menuItemId = e.target.dataset.menu_item_id
-    console.log('menuItemId', menuItemId)
+    //const menuItemId = e.target.dataset.menu_item_id
+    const menuItemId = menuItem;
     emmetAPI.fetchUrl(`/api/v1/cart?token=${token}`, {
       method: 'POST',
       credentials: 'include',
@@ -125,6 +126,7 @@ class Home extends Component {
     .then(res => {
       if (res.status === 200) {
         console.log('Added to cart')
+        console.log('res', res)
       } else {
         const error = new Error(res.error);
         throw error;
@@ -162,14 +164,18 @@ class Home extends Component {
               dataSource={this.state.menuItemsAvailable}
               renderItem={menuItem => (
                 <List.Item
-                  key={menuItem.name}
+                  key={menuItem._id}
                 >
                   <List.Item.Meta
                     avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
                     title={menuItem.name}
                   />
                   <div>
-                    <Button type="primary" data-menu_item_id={menuItem._id} onClick={this.addToCart}>
+                    <Button
+                      type="primary"
+                      data-menu_item_id={menuItem._id}
+                      onClick={this.addToCart.bind(this, menuItem._id)}
+                    >
                       Add to Cart
                     </Button>
                   </div>
@@ -189,9 +195,10 @@ class Home extends Component {
       )
     }
 
+    const name = localStorage.getItem('name') ? localStorage.getItem('name') : "Guest";
     return (
       <PageHeader
-        title="Welcome to Emmet Ordering System!"
+        title={`Welcome ${name} to Emmet Ordering System!`}
       >
         <div className="wrap">
           <div className="extraContent">
