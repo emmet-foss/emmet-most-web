@@ -162,6 +162,10 @@ class Home extends Component {
           const body = await res.text()
           const guest = JSON.parse(body).guest;
           console.log('existing guest', guest)
+          if (!guest) {
+            message.error("Guest not found")
+            throw Error("Guest not found");
+          }
           this.addMenuItemToCart(menuItem, guest);
         } else {
           const error = new Error(res.error);
@@ -170,7 +174,7 @@ class Home extends Component {
       })
       .catch(err => {
         console.error(err);
-        alert('Error logging in please try again');
+        alert('Error adding item to cart. Please try again');
       });
     }
   }
