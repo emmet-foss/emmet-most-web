@@ -50,14 +50,9 @@ class SideMenu extends Component {
               <Icon type="shopping-cart" /><span>Checkout</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="/me">
-            <NavLink to="/me">
+          <Menu.Item key="/guest">
+            <NavLink to="/guest">
               <Icon type="user" /><span>Me</span>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key="/login">
-            <NavLink to="/login">
-              <Icon type="lock" /><span>Login</span>
             </NavLink>
           </Menu.Item>
         </Menu>

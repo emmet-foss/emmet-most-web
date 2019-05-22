@@ -33,7 +33,7 @@ const routing = (
             <Route path="/stores" component={ContentWrapper} />
             <Route path="/orders" component={ContentWrapper} />
             <Route path="/checkout" component={ContentWrapper} onEnter={requireAuth} />
-            <Route path="/login" component={ContentWrapper} />
+            <Route path="/guest" component={ContentWrapper} />
             <Route component={Notfound} />
         </Switch>
     </Router>

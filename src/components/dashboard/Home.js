@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Cookies from 'js-cookie';
 import {
   PageHeader,
   Statistic,
@@ -10,6 +9,7 @@ import {
   List,
   Button,
   Avatar,
+  message,
 } from 'antd';
 
 import emmetAPI from '../../emmetAPI';
@@ -108,11 +108,8 @@ class Home extends Component {
       .catch(err => console.log(err));
   };
 
-  addToCart = async(e) => {
-    const token = Cookies.get('token');
-    const menuItemId = e.target.dataset.menu_item_id
-    console.log('menuItemId', menuItemId)
-    emmetAPI.fetchUrl(`/api/v1/cart?token=${token}`, {
+  addMenuItemToCart = async(menuItemId, guest) => {
+    emmetAPI.fetchUrl(`/api/v1/cart/${guest._id}`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -124,7 +121,8 @@ class Home extends Component {
     })
     .then(res => {
       if (res.status === 200) {
-        console.log('Added to cart')
+        message.success('Item successfully added to cart.');
+        console.log('res', res)
       } else {
         const error = new Error(res.error);
         throw error;
@@ -132,8 +130,49 @@ class Home extends Component {
     })
     .catch(err => {
       console.error(err);
-      alert('Error logging in please try again');
+      alert('Error adding item to cart. Please try again');
     });
+  }
+
+  addToCart = async(menuItem) => {
+    const guest_id = localStorage.getItem('guest_id');
+    if (!guest_id) {
+      console.log('new guest account')
+      const response = await emmetAPI.fetchUrl(`/api/v1/guests`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: "guest"
+        }),
+      });
+
+      const body = await response.text();
+      const guest = JSON.parse(body).guest;
+      localStorage.setItem('guest_id', guest._id);
+
+      this.addMenuItemToCart(menuItem, guest);
+
+    } else {
+      emmetAPI.getUrl(`/api/v1/guests/${guest_id}`)
+      .then(async (res) => {
+        if (res.status === 200) {
+          const body = await res.text()
+          const guest = JSON.parse(body).guest;
+          console.log('existing guest', guest)
+          this.addMenuItemToCart(menuItem, guest);
+        } else {
+          const error = new Error(res.error);
+          throw error;
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Error logging in please try again');
+      });
+    }
   }
 
   render() {
@@ -162,14 +201,17 @@ class Home extends Component {
               dataSource={this.state.menuItemsAvailable}
               renderItem={menuItem => (
                 <List.Item
-                  key={menuItem.name}
+                  key={menuItem._id}
                 >
                   <List.Item.Meta
                     avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
                     title={menuItem.name}
                   />
                   <div>
-                    <Button type="primary" data-menu_item_id={menuItem._id} onClick={this.addToCart}>
+                    <Button
+                      type="primary"
+                      onClick={this.addToCart.bind(this, menuItem._id)}
+                    >
                       Add to Cart
                     </Button>
                   </div>
@@ -189,9 +231,10 @@ class Home extends Component {
       )
     }
 
+    const name = localStorage.getItem('name') ? localStorage.getItem('name') : "Guest";
     return (
       <PageHeader
-        title="Welcome to Emmet Ordering System!"
+        title={`Welcome ${name} to Emmet Ordering System!`}
       >
         <div className="wrap">
           <div className="extraContent">
@@ -240,7 +283,7 @@ class Home extends Component {
                   <Statistic value="When will you attend?" />
                   <DatePicker
                     placeholder="Select Time"
-                    disabledDate={disablePastDates}
+                    // disabledDate={disablePastDates}
                     onChange={this.queryAvailableMenuItems}
                     value={this.state.date_available}
                     style={{ width: '100%'}}
