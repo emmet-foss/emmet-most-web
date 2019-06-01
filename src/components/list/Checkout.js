@@ -61,6 +61,9 @@ class Checkout extends Component {
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        name: "guest"
+      }),
     })
     .then(res => {
       console.log('res', res)
