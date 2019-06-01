@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import Cookies from 'js-cookie';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 import {
   Avatar,
+  Button,
   Col,
   List,
+  message,
   Row,
   Statistic,
 } from 'antd';
@@ -45,11 +46,36 @@ class Checkout extends Component {
   }
 
   getCheckoutItems = async () => {
-    const token = Cookies.get('token');
-    const response = await emmetAPI.getUrl(`/api/v1/checkout?token=${token}`);
+    const guest_id = localStorage.getItem('guest_id');
+    const response = await emmetAPI.getUrl(`/api/v1/checkout/${guest_id}`);
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
+  };
+
+  handleConfirmCheckout = async () => {
+    const guest_id = localStorage.getItem('guest_id');
+    emmetAPI.fetchUrl(`/api/v1/checkout/${guest_id}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(res => {
+      console.log('res', res)
+      if (res.status === 200) {
+        message.success('Items successfully checked out. Please wait for your orders to be handed over to you on your visit.');
+        console.log('res', res)
+      } else {
+        const error = new Error(res.error);
+        throw error;
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Error checking out.');
+    });
   };
 
   render() {
@@ -78,6 +104,14 @@ class Checkout extends Component {
                   </List.Item>
                 )}
               />
+              <div>
+                <Button
+                  type="primary"
+                  onClick={this.handleConfirmCheckout}
+                >
+                  Confirm checkout
+                </Button>
+              </div>
             </Col>
           </Row>
         </div>
