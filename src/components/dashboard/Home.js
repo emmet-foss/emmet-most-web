@@ -246,7 +246,6 @@ class Home extends Component {
               <Col xs={24} sm={24} md={24} lg={12}>
                 <Statistic value="Where will you be attending?" />
                 <Select
-                  showSearch
                   style={{ width: '100%' }}
                   placeholder="Search a location"
                   dropdownMatchSelectWidth={false}
@@ -264,7 +263,6 @@ class Home extends Component {
                 <Col xs={24} sm={24} md={24} lg={12}>
                   <Statistic value="What will you be ordering?" />
                   <Select
-                    showSearch
                     style={{ width: '100%' }}
                     placeholder="Choose a menu"
                     dropdownMatchSelectWidth={false}
