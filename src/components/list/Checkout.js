@@ -69,6 +69,7 @@ class Checkout extends Component {
       console.log('res', res)
       if (res.status === 200) {
         message.success('Items successfully checked out. Please wait for your orders to be handed over to you on your visit.');
+        this.setState({ cart_items: [] })
         console.log('res', res)
       } else {
         const error = new Error(res.error);
@@ -89,32 +90,38 @@ class Checkout extends Component {
         <div className="extraContent">
           <Row>
             <Col xs={24} sm={24} md={24} lg={12}>
-              <Statistic value="Here are your orders for checkout:" />
-              <List
-                itemLayout="horizontal"
-                bordered
-                size="large"
-                dataSource={cart_items}
-                renderItem={item => (
-                  <List.Item
-                    key={item._id}
-                  >
-                    <List.Item.Meta
-                      avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                      title={item.name}
-                    />
-                    {item.quantity}
-                  </List.Item>
-                )}
-              />
-              <div>
-                <Button
-                  type="primary"
-                  onClick={this.handleConfirmCheckout}
-                >
-                  Confirm checkout
-                </Button>
-              </div>
+              {(cart_items && cart_items.length === 0) ?
+                <Statistic value="No checked out orders yet." />
+              :
+                <div>
+                  <Statistic value="Here are your orders for checkout:" />
+                  <List
+                    itemLayout="horizontal"
+                    bordered
+                    size="large"
+                    dataSource={cart_items}
+                    renderItem={item => (
+                      <List.Item
+                        key={item._id}
+                      >
+                        <List.Item.Meta
+                          avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                          title={item.name}
+                        />
+                        {item.quantity}
+                      </List.Item>
+                    )}
+                  />
+                  <div>
+                    <Button
+                      type="primary"
+                      onClick={this.handleConfirmCheckout}
+                    >
+                      Confirm checkout
+                    </Button>
+                  </div>
+                </div>
+              }
             </Col>
           </Row>
         </div>
