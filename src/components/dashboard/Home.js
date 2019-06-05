@@ -108,7 +108,7 @@ class Home extends Component {
       .catch(err => console.log(err));
   };
 
-  addMenuItemToCart = async(menuItemId, guest) => {
+  addMenuItemToCart = async(menuItemId, storeId, guest) => {
     emmetAPI.fetchUrl(`/api/v1/cart/${guest._id}`, {
       method: 'POST',
       credentials: 'include',
@@ -116,7 +116,8 @@ class Home extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        menuItemId
+        menuItemId,
+        storeId,
       }),
     })
     .then(res => {
@@ -134,7 +135,7 @@ class Home extends Component {
     });
   }
 
-  addToCart = async(menuItem) => {
+  addToCart = async(menuItem, storeId) => {
     const guest_id = localStorage.getItem('guest_id');
     if (!guest_id) {
       console.log('new guest account')
@@ -153,7 +154,7 @@ class Home extends Component {
       const guest = JSON.parse(body).guest;
       localStorage.setItem('guest_id', guest._id);
 
-      this.addMenuItemToCart(menuItem, guest);
+      this.addMenuItemToCart(menuItem, storeId, guest);
 
     } else {
       emmetAPI.getUrl(`/api/v1/guests/${guest_id}`)
@@ -166,7 +167,7 @@ class Home extends Component {
             message.error("Guest not found")
             throw Error("Guest not found");
           }
-          this.addMenuItemToCart(menuItem, guest);
+          this.addMenuItemToCart(menuItem, storeId, guest);
         } else {
           const error = new Error(res.error);
           throw error;
@@ -214,7 +215,7 @@ class Home extends Component {
                   <div>
                     <Button
                       type="primary"
-                      onClick={this.addToCart.bind(this, menuItem._id)}
+                      onClick={this.addToCart.bind(this, menuItem._id, menutItem.storeId)}
                     >
                       Add to Cart
                     </Button>
