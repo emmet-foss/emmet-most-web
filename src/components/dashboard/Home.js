@@ -215,7 +215,7 @@ class Home extends Component {
                   <div>
                     <Button
                       type="primary"
-                      onClick={this.addToCart.bind(this, menuItem._id, menutItem.storeId)}
+                      onClick={this.addToCart.bind(this, menuItem._id, menuItem.storeId)}
                     >
                       Add to Cart
                     </Button>
