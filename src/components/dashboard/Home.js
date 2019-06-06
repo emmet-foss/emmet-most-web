@@ -137,7 +137,7 @@ class Home extends Component {
 
   addToCart = async(menuItem, storeId) => {
     const guest_id = localStorage.getItem('guest_id');
-    if (!guest_id) {
+    if (!guest_id || guest_id === "null") {
       console.log('new guest account')
       const response = await emmetAPI.fetchUrl(`/api/v1/guests`, {
         method: 'POST',

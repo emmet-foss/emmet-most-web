@@ -35,6 +35,7 @@ class Guest extends Component {
         console.log('Received values of form: ', values);
         localStorage.setItem('name', this.state.name);
         localStorage.setItem('email', this.state.email);
+        localStorage.removeItem('guest_id')
     
         this.setState({ responseToPost: "User info saved." })
       }
